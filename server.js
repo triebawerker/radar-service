@@ -7,11 +7,11 @@ app.configure(function () {
     app.use(express.bodyParser());
 });
  
-app.get('/wines', technologies.findAll);
-app.get('/wines/:id', technologies.findById);
-app.post('/wines', technologies.addWine);
-app.put('/wines/:id', technologies.updateWine);
-app.delete('/wines/:id', technologies.deleteWine);
+app.get('/technologies', technologies.findAll);
+app.get('/technologies/:id', technologies.findById);
+app.post('/technologies', technologies.add);
+app.put('/technologies/:id', technologies.update);
+app.delete('/technologies/:id', technologies.deleteTechnologie);
  
 app.listen(3000);
 console.log('Listening on port 3000...');
