@@ -18,12 +18,31 @@ db.open(function(err, db) {
         });
     }
 });
+
+
+
+exports.options = function(req, res) {
+  console.log('Answer options request');
+
+  var headers = {};
+  // IE8 does not allow domains to be specified, just the *
+  // headers["Access-Control-Allow-Origin"] = req.headers.origin;
+  headers["Access-Control-Allow-Origin"] = "*";
+  headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+  headers["Access-Control-Allow-Credentials"] = false;
+  headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+  headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+  res.writeHead(200, headers);
+
+  return(res.end());
+}
  
 exports.findById = function(req, res) {
     var id = req.params.id;
     console.log('Retrieving technologie: ' + id);
     db.collection('technologies', function(err, collection) {
-        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+        collection.findOne({'_id': BSON.ObjectID(id)}, function(err, item) { res.header("Access-Control-Allow-Origin", "http://localhost:8000");
+	    res.header("Access-Control-Allow-Headers", "*");
             res.send(item);
         });
     });
@@ -32,6 +51,8 @@ exports.findById = function(req, res) {
 exports.findAll = function(req, res) {
     db.collection('technologies', function(err, collection) {
         collection.find().toArray(function(err, items) {
+	    res.header("Access-Control-Allow-Origin", "*");
+	    res.header("Access-Control-Allow-Headers", "*");
             res.send(items);
         });
     });
@@ -46,6 +67,8 @@ exports.add = function(req, res) {
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('Success: ' + JSON.stringify(result[0]));
+	        res.header("Access-Control-Allow-Origin", "*");
+	        res.header("Access-Control-Allow-Headers", "*");
                 res.send(result[0]);
             }
         });
@@ -64,6 +87,8 @@ exports.update = function(req, res) {
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' document(s) updated');
+	        res.header("Access-Control-Allow-Origin", "*");
+	        res.header("Access-Control-Allow-Headers", "*");
                 res.send(technologie);
             }
         });
